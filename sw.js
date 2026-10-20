@@ -16,16 +16,21 @@ self.addEventListener('activate', (e) => {
   );
 });
 
-/* 開くときは まずネットで最新を取りにいく。つながらなければ 覚えているものを出す。 */
+/* 開くときは まずネットで最新を取りにいく。3秒つながらなければ 覚えているものを出す(電波が弱い所で 黒い画面のまま 待たせない)。 */
 self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
+  const nav = req.mode === 'navigate';
+  const key = nav ? './' : req;   // ページは ?... がついても 1つとして覚える
+  const net = fetch(req).then((res) => {
+    if (res.ok) { const copy = res.clone(); e.waitUntil(caches.open(VERSION).then((c) => c.put(key, copy))); }
+    return res;
+  });
+  const late = new Promise((r) => setTimeout(r, 3000));
+  const fromCache = () => caches.match(key, { ignoreSearch: nav }).then((hit) => hit || caches.match('index.html'));
   e.respondWith(
-    fetch(req)
-      .then((res) => {
-        if (res.ok) { const copy = res.clone(); caches.open(VERSION).then((c) => c.put(req, copy)); }
-        return res;
-      })
-      .catch(() => caches.match(req).then((hit) => hit || caches.match('index.html')))
+    Promise.race([net, late.then(() => fromCache().then((hit) => hit || net))])
+      .then((res) => res || net)
+      .catch(() => fromCache())
   );
 });

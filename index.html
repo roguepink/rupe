@@ -29,74 +29,69 @@
   button { font: inherit; color: inherit; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
   button:focus-visible { outline: 4px solid var(--on); outline-offset: 3px; }
   .app { position: fixed; inset: 0; display: flex; flex-direction: column; }
+  .jp { word-break: auto-phrase; line-break: strict; }
 
-  /* ---- カメラの絵 ---- */
+  /* ---- カメラの画面 ---- */
   .stage { position: relative; flex: 1 1 auto; min-height: 0; overflow: hidden; background: #000; touch-action: none; }
   .view { position: absolute; inset: 0; }
   .media { position: absolute; left: 0; top: 0; transform-origin: 50% 50%; will-change: transform; }
   #still { display: none; }
   .frozen #still { display: block; }
   .frozen #video { visibility: hidden; }
-  .view.f-clear { filter: grayscale(1) contrast(1.9) brightness(1.08); }
-  .view.f-white { filter: grayscale(1) invert(1) contrast(1.9); }
-  .view.f-yellow { filter: grayscale(1) invert(1) contrast(1.9); }
-  .tint { position: absolute; inset: 0; background: var(--on); mix-blend-mode: multiply; pointer-events: none; display: none; }
-  .tint.on { display: block; }
-  .tag { position: absolute; left: 50%; top: 14px; transform: translateX(-50%); padding: 6px 18px; border-radius: 999px;
+  .view.f-clear { filter: grayscale(1) contrast(1.9) brightness(1.1); }
+  .view.f-white { filter: grayscale(1) invert(1) contrast(1.9) brightness(1.05); }
+  /* 黒地に黄: 白黒を反対にしてから、白い所だけ 黄色に そめる(重ねる板を使わない。iPhone でも 同じに見えるように) */
+  .view.f-yellow { filter: grayscale(1) invert(1) contrast(1.9) sepia(1) saturate(9) hue-rotate(-3deg) brightness(1.08); }
+  .tag { position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%); padding: 6px 20px; border-radius: 999px;
     background: var(--on); color: var(--on-ink); font-weight: 900; font-size: 22px; white-space: nowrap; display: none; pointer-events: none;
-    box-shadow: 0 0 0 3px #000; }
+    box-shadow: 0 0 0 5px #000; }
   .frozen .tag { display: block; }
-  .safe-top { padding-top: env(safe-area-inset-top); }
+  .helpbtn { position: absolute; right: 12px; top: calc(env(safe-area-inset-top) + 12px); z-index: 3; min-height: 60px; padding: 4px 16px;
+    border: 3px solid #fff; border-radius: 16px; background: rgba(0, 0, 0, .78); font-size: 21px; font-weight: 800; white-space: nowrap; }
+  .helpbtn:active { background: #444; }
 
   /* はじめの説明・カメラが使えないとき */
   .cover { position: absolute; inset: 0; z-index: 5; display: none; flex-direction: column; justify-content: center; gap: 18px;
-    padding: calc(env(safe-area-inset-top) + 18px) 22px 18px; background: #111; overflow-y: auto; touch-action: pan-y; }
+    padding: calc(env(safe-area-inset-top) + 18px) 22px calc(env(safe-area-inset-bottom) + 18px); background: #111; overflow-y: auto; touch-action: pan-y; }
   .cover.on { display: flex; }
   .cover h1 { margin: 0; font-size: 34px; line-height: 1.25; font-weight: 900; color: var(--on); }
   .cover p { margin: 0; font-size: 22px; line-height: 1.65; font-weight: 700; }
-  .cover ol { margin: 0; padding-left: 1.4em; font-size: 21px; line-height: 1.6; font-weight: 700; }
-  .cover p, .cover ol, .help p, .help li { word-break: keep-all; overflow-wrap: anywhere; }
   .cover b, .help b { color: var(--on); }
-  .app.covered .panel { display: none; }
-  .cover .small { font-size: 20px; color: var(--muted); font-weight: 700; }
+  .cover .small { font-size: 20px; color: var(--muted); }
+  .app.covered .panel, .app.covered .helpbtn { display: none; }
 
   /* ---- 下のボタン ---- */
   .panel { flex: 0 0 auto; background: #000; border-top: 3px solid #333;
-    padding: 8px 14px calc(env(safe-area-inset-bottom) + 12px); display: flex; flex-direction: column; gap: 10px; }
-  .status { min-height: 2.9em; display: flex; align-items: center; justify-content: center; text-align: center;
-    font-size: 20px; line-height: 1.45; font-weight: 700; color: var(--muted); word-break: keep-all; overflow-wrap: anywhere; }
+    padding: 6px 14px calc(env(safe-area-inset-bottom) + 12px); display: flex; flex-direction: column; gap: 10px; }
+  .status { min-height: 1.5em; text-align: center; font-size: 19px; line-height: 1.5; font-weight: 700; color: var(--muted); }
   .status.hot { color: var(--on); }
   .row { display: flex; gap: 14px; }
   .row > * { flex: 1 1 0; min-width: 0; }
-  .b { min-height: 78px; padding: 6px 4px; border: 3px solid var(--line); border-radius: 18px; background: var(--btn);
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0;
+  .b { min-height: 76px; padding: 6px 4px; border: 3px solid var(--line); border-radius: 18px; background: var(--btn);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
     font-size: 25px; font-weight: 800; line-height: 1.2; white-space: nowrap; }
   .b small { font-size: 18px; font-weight: 700; color: var(--muted); }
   .b:active { background: #444; }
   .b.on { background: var(--on); color: var(--on-ink); border-color: var(--on); }
   .b.on small { color: #222; }
-  .b:disabled { opacity: .4; }
-  .b.na { border-style: dashed; color: #bbb; }
-  .b .ic { font-size: 26px; }
-  .zoom .b { font-size: 26px; }
+  .b:disabled { opacity: .35; }
   .zoom .b .big { font-size: 36px; line-height: 1; font-weight: 900; }
   .level { flex: 0 0 34%; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 18px; background: #111; }
-  .level .num { font-size: 44px; font-weight: 900; line-height: 1.05; color: #fff; }
+  .level .num { font-size: 44px; font-weight: 900; line-height: 1.05; }
   .level .lab { font-size: 18px; color: var(--muted); font-weight: 700; }
-  .row.sub .b { min-height: 66px; font-size: 23px; }
+  .b.main { min-height: 88px; font-size: 30px; font-weight: 900; }
 
   /* ---- 使い方 ---- */
   .help { position: fixed; inset: 0; z-index: 10; display: none; overflow-y: auto; background: #111; -webkit-overflow-scrolling: touch;
-    padding: calc(env(safe-area-inset-top) + 14px) 20px calc(env(safe-area-inset-bottom) + 24px); -webkit-user-select: text; user-select: text; }
+    padding: calc(env(safe-area-inset-top) + 14px) 20px calc(env(safe-area-inset-bottom) + 24px); }
   .help.on { display: block; }
-  .help h2 { margin: 26px 0 8px; font-size: 27px; color: var(--on); line-height: 1.3; }
+  .help h2 { margin: 28px 0 8px; font-size: 27px; color: var(--on); line-height: 1.3; }
   .help h2:first-of-type { margin-top: 8px; }
   .help p, .help li { font-size: 21px; line-height: 1.7; font-weight: 600; }
   .help p { margin: 6px 0; }
   .help ol, .help ul { margin: 6px 0; padding-left: 1.4em; }
-  .help li { margin: 4px 0; }
+  .help li { margin: 6px 0; }
   .help .b { width: 100%; }
-  .help .top { position: sticky; top: calc(-1 * env(safe-area-inset-top) - 14px); z-index: 1; background: #111; padding: 4px 0 10px; }
   .hidden { display: none !important; }
 </style>
 </head>
@@ -105,87 +100,88 @@
   <div class="stage" id="stage">
     <div class="view" id="view">
       <video class="media" id="video" playsinline muted autoplay></video>
-      <canvas class="media" id="still"></canvas>
+      <canvas class="media" id="still" width="0" height="0"></canvas>
     </div>
-    <div class="tint" id="tint"></div>
-    <div class="tag safe-top" id="tag">⏸ 止めています</div>
+    <div class="tag" id="tag">⏸ 止まっています</div>
+    <button type="button" class="helpbtn" id="helpBtn">？ 使い方</button>
 
-    <div class="cover" id="cover" role="dialog" aria-live="polite">
+    <div class="cover jp" id="cover" role="dialog" aria-live="polite">
       <div id="coverBody"></div>
       <button type="button" class="b on" id="coverBtn">はじめる</button>
-      <button type="button" class="b hidden" id="coverExt">Safari・Chrome で 開く</button>
-      <button type="button" class="b" id="coverHelp">❓ 使い方</button>
+      <button type="button" class="b on hidden" id="coverExt">Safari・Chromeで開く</button>
+      <button type="button" class="b" id="coverHelp">？ 使い方</button>
     </div>
   </div>
 
   <div class="panel" id="panel">
-    <div class="status" id="status" aria-live="polite"></div>
+    <div class="status jp" id="status" aria-live="polite"></div>
     <div class="row zoom">
       <button type="button" class="b" id="minus" aria-label="小さく"><span class="big">－</span>小さく</button>
       <div class="level" aria-live="polite"><span class="num" id="levelNum">2倍</span><span class="lab">いまの大きさ</span></div>
       <button type="button" class="b" id="plus" aria-label="大きく"><span class="big">＋</span>大きく</button>
     </div>
     <div class="row">
-      <button type="button" class="b" id="light" aria-pressed="false"><span><span class="ic">💡</span> ライト</span><small id="lightSub">消えています</small></button>
-      <button type="button" class="b" id="freeze" aria-pressed="false"><span id="freezeLab"><span class="ic">⏸</span> 止める</span><small id="freezeSub">ゆっくり読む</small></button>
-    </div>
-    <div class="row sub">
+      <button type="button" class="b" id="light" aria-pressed="false"><span>💡 ライト</span><small id="lightSub">消えています</small></button>
       <button type="button" class="b" id="color"><span>🎨 見やすい色</span><small id="colorSub">ふつう</small></button>
-      <button type="button" class="b" id="helpBtn"><span>❓ 使い方</span><small>こまったとき</small></button>
     </div>
+    <button type="button" class="b main" id="freeze" aria-pressed="false"><span id="freezeLab">⏸ 止める</span><small id="freezeSub">画面を止めて、ゆっくり読む</small></button>
   </div>
 </div>
 
-<div class="help" id="help" role="dialog" aria-label="使い方">
-  <div class="top"><button type="button" class="b on" data-close>◀ もどる</button></div>
+<div class="help jp" id="help" role="dialog" aria-label="使い方">
+  <button type="button" class="b on" data-close>◀ もどる</button>
 
   <h2>使い方</h2>
   <ol>
-    <li>見たいものに、スマホを <b>10〜15センチ</b> くらい 近づけます。</li>
-    <li>「<b>＋ 大きく</b>」「<b>－ 小さく</b>」で、大きさを かえます。</li>
-    <li>暗いときは「<b>💡 ライト</b>」。</li>
-    <li>手が ふるえて 読みにくいときは「<b>⏸ 止める</b>」。<br>絵が 止まるので、スマホを 楽に持って ゆっくり読めます。</li>
-    <li>止めた絵は、<b>指で なぞると 動きます</b>。<br><b>見たい所を 指で 1回 押すと</b>、そこが まん中に来ます。</li>
-    <li>「<b>🎨 見やすい色</b>」を押すたびに、<br>ふつう → くっきり(白黒) → 黒地に白 → 黒地に黄 と かわります。</li>
+    <li>見たいものに、スマホを<b>10〜15センチ</b>くらい近づけます。</li>
+    <li>「<b>＋大きく</b>」「<b>－小さく</b>」で、大きさをかえます。</li>
+    <li>暗いときは「<b>💡ライト</b>」。</li>
+    <li>手がふるえて読みにくいときは「<b>⏸止める</b>」。カメラの画面を<b>軽く1回押しても</b>止まります。<br>画面が止まるので、スマホを楽に持って、ゆっくり読めます。</li>
+    <li>止めた画面は、<b>指でなぞると、見る所が動きます</b>。見たい所を<b>指で軽く1回押す</b>と、そこがまん中に来ます。</li>
+    <li>「<b>▶カメラに戻る</b>」で、またカメラが動きます。</li>
+    <li>「<b>🎨見やすい色</b>」は、押すたびに色がかわります。
+      <ul><li>ふつう</li><li>くっきり(白黒)</li><li>黒地に白</li><li>黒地に黄</li></ul></li>
   </ol>
 
   <h2>うまく見えないとき</h2>
   <ul>
-    <li><b>ぼやける</b> … 近すぎると ピントが合いません。少し はなしてください。</li>
-    <li><b>光って 字が見えない</b> … 紙を 少し かたむけるか、ライトを 消してください。</li>
-    <li><b>ぶれる</b> … ひじを テーブルに つけると ぶれにくくなります。それでも だめなら「止める」。</li>
-    <li><b>ライトが 使えない</b> … スマホによっては、このアプリから ライトを つけられません。明るい所で 見てください。</li>
+    <li><b>ぼやける</b>…近すぎるとピントが合いません。少しはなしてください。</li>
+    <li><b>光って字が見えない</b>…紙を少しかたむけるか、ライトを消してください。</li>
+    <li><b>ぶれる</b>…ひじをテーブルにつけると、ぶれにくくなります。それでもだめなら「止める」。</li>
+    <li><b>ライトのボタンがない</b>…スマホによっては、このアプリからライトをつけられません。明るい所で見てください。</li>
   </ul>
 
-  <h2>カメラが 使えないとき</h2>
+  <h2>カメラが使えないとき</h2>
   <p><b>iPhone(Safari)</b></p>
   <ol>
-    <li>上か下の アドレスの所の「<b>ぁあ</b>」(または「AA」)を押す</li>
+    <li>アドレスの左はしのマーク(「ぁあ」や、紙のようなマーク)を押す</li>
     <li>「<b>Webサイトの設定</b>」を押す</li>
-    <li>「カメラ」を「<b>許可</b>」にする</li>
-    <li>このページを 開き直す</li>
+    <li>「カメラ」を押して「<b>許可</b>」を選ぶ</li>
+    <li>このページを開き直す</li>
   </ol>
+  <p>それでもだめなら:「設定」→「アプリ」→「Safari」→「カメラ」→「<b>許可</b>」</p>
   <p><b>Android(Chrome)</b></p>
   <ol>
-    <li>アドレスの 左はしの マークを押す</li>
+    <li>アドレスの左はしのマークを押す</li>
     <li>「<b>権限</b>」または「サイトの設定」を押す</li>
-    <li>「カメラ」を <b>オン(許可)</b> にする</li>
-    <li>このページを 開き直す</li>
+    <li>「カメラ」を<b>オン(許可)</b>にする</li>
+    <li>このページを開き直す</li>
   </ol>
-  <p><b>LINE の中で 開いているとき</b>は、カメラが 使えないことがあります。<br>右上か右下の メニューから「<b>Safari で開く</b>」(iPhone)・「<b>他のアプリで開く</b>」→ Chrome(Android)を 選んでください。</p>
-  <p>わからないときは、ご家族に この画面を 見せてください。</p>
+  <p>それでもだめなら:スマホの「設定」→「アプリ」→「Chrome」→「権限」→「カメラ」を許可</p>
+  <p><b>LINEの中で開いているとき</b>は、カメラが使えないことがあります。右上か右下のメニュー(「︙」など)から「<b>Safariで開く</b>」(iPhone)・「<b>ブラウザで開く</b>」または「他のアプリで開く」→Chrome(Android)を選んでください。</p>
+  <p>わからないときは、ご家族やお店の人に、この画面を見せてください。</p>
 
-  <h2>ホーム画面に 入れると 便利です</h2>
+  <h2>ホーム画面に入れると便利です</h2>
   <ul>
-    <li><b>iPhone</b> … Safari の 下の「<b>共有</b>」(四角に上むきの矢印)→「<b>ホーム画面に追加</b>」</li>
-    <li><b>Android</b> … Chrome の 右上「<b>︙</b>」→「<b>ホーム画面に追加</b>」</li>
+    <li><b>iPhone</b>…Safariの「<b>共有</b>」(四角に上むきの矢印)→「<b>ホーム画面に追加</b>」</li>
+    <li><b>Android</b>…Chromeの右上「<b>︙</b>」→「<b>ホーム画面に追加</b>」</li>
   </ul>
-  <p>一度 入れると、次からは アイコンを押すだけで すぐ使えます。</p>
+  <p>一度入れると、次からはアイコンを押すだけで、すぐ使えます。</p>
 
   <h2>このアプリについて</h2>
   <ul>
-    <li>写した絵は <b>保存しません</b>。<b>どこにも送りません</b>。</li>
-    <li>広告は ありません。お金も かかりません。</li>
+    <li>写したものは<b>保存しません</b>。<b>どこにも送りません</b>。</li>
+    <li>広告はありません。お金もかかりません。</li>
   </ul>
 
   <div style="margin-top:24px"><button type="button" class="b on" data-close>◀ もどる</button></div>
@@ -198,15 +194,17 @@
   const video = $('video'), still = $('still'), stage = $('stage'), view = $('view');
 
   /* ---- 決まりごと ---- */
-  const LEVELS = [1, 1.5, 2, 3, 4, 6, 8];        // 「大きく」「小さく」で 1段ずつ動く大きさ
-  const MAX_LIVE = 8, MAX_STILL = 12;             // これより大きいと ぼやけるだけなので 止める
+  const LEVELS = [1, 1.5, 2, 3, 4, 6, 8];   // 「大きく」「小さく」で 1段ずつ動く大きさ
+  const MAX_LIVE = 8, MAX_STILL = 10;        // これより大きくしても ぼやけるだけ
   const COLORS = [
     { key: 'normal', name: 'ふつう' },
     { key: 'clear', name: 'くっきり' },
     { key: 'white', name: '黒地に白' },
     { key: 'yellow', name: '黒地に黄' }
   ];
-  const isLine = /\bLine\//i.test(navigator.userAgent);
+  const ua = navigator.userAgent;
+  const isLine = /\bLine\//i.test(ua);
+  const isIOS = /iPhone|iPad|iPod/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
   const store = {
     get(k, d) { try { const v = localStorage.getItem('rupe.' + k); return v === null ? d : v; } catch (e) { return d; } },
     set(k, v) { try { localStorage.setItem('rupe.' + k, String(v)); } catch (e) {} }
@@ -215,16 +213,19 @@
   /* ---- いまの様子 ---- */
   const S = {
     z: clampNum(parseFloat(store.get('zoom', '2')) || 2, 1, MAX_LIVE),   // 見えている大きさ(全体)
-    hw: 1,            // カメラ側で 大きくしている分(できる機種だけ)
-    frozen: false, frozenHw: 1, tx: 0, ty: 0,
-    torch: false, color: clampNum(parseInt(store.get('color', '0'), 10) || 0, 0, COLORS.length - 1),
+    hw: 1, zoomBase: 1,       // カメラ側で 大きくしている分(できる機種だけ)と、そのはじめの値
+    frozen: false, capturing: false, frozenHw: 1, tx: 0, ty: 0,
+    torch: false, torchWanted: false,
+    color: clampNum(parseInt(store.get('color', '0'), 10) || 0, 0, COLORS.length - 1),
     stream: null, track: null, caps: {}, running: false, starting: false
   };
+  let gen = 0;   // カメラを つけ直すたびに 1つ増やす(古い つけ直しを 途中で やめるため)
 
   function clampNum(v, a, b) { return Math.max(a, Math.min(b, v)); }
   function buzz() { try { navigator.vibrate && navigator.vibrate(30); } catch (e) {} }
+  function settings() { try { return (S.track && S.track.getSettings && S.track.getSettings()) || {}; } catch (e) { return {}; } }
 
-  /* ---- ひとこと(下の説明の行) ---- */
+  /* ---- ひとこと(下の説明の行。1行だけ) ---- */
   let msgTimer = 0, msgHold = false;
   function say(text, hot, ms) {
     const el = $('status'); el.textContent = text; el.classList.toggle('hot', !!hot);
@@ -233,22 +234,21 @@
   }
   function hint() {
     if (msgHold) return;
-    if (S.frozen) say('指で なぞると 動きます。見たい所を 押すと まん中に来ます');
-    else if (!S.running) say(S.starting ? 'カメラを 準備しています…' : '');
-    else if (S.z >= 4) say('ぶれるときは「止める」を押すと、ゆっくり読めます');
-    else say('見たいものに 10〜15センチ 近づけてください');
+    if (S.capturing) say('止めています…');
+    else if (S.frozen) say('指でなぞると、見る所が動きます');
+    else if (!S.running) say(S.starting ? 'カメラを準備しています…' : '');
+    else if (S.z >= 4) say('ぶれるときは、画面を軽く押して止める');
+    else say('10〜15センチ近づけてください');
   }
 
-  /* ---- 絵の大きさと位置 ---- */
-  function mediaSize(el) {
-    return el === still ? [still.width, still.height] : [video.videoWidth, video.videoHeight];
-  }
+  /* ---- 画面の大きさと位置 ---- */
   function render() {
     const el = S.frozen ? still : video;
-    const [w, h] = mediaSize(el); if (!w || !h) return;
+    const w = S.frozen ? still.width : video.videoWidth, h = S.frozen ? still.height : video.videoHeight;
+    if (!w || !h) return;
     const W = stage.clientWidth, H = stage.clientHeight;
-    const k = Math.max(W / w, H / h), bw = w * k, bh = h * k;   // 画面いっぱいに おさめた大きさ
-    const s = S.frozen ? S.z / S.frozenHw : S.z / S.hw;          // その上に、画面で 大きくする分
+    const k = Math.max(W / w, H / h), bw = w * k, bh = h * k;               // 画面いっぱいに おさめた大きさ
+    const s = S.frozen ? S.z / S.frozenHw : Math.max(1, S.z / S.hw);         // その上に、画面で 大きくする分
     const mx = Math.max(0, (bw * s - W) / 2), my = Math.max(0, (bh * s - H) / 2);
     if (!S.frozen) { S.tx = 0; S.ty = 0; }
     S.tx = clampNum(S.tx, -mx, mx); S.ty = clampNum(S.ty, -my, my);
@@ -263,19 +263,22 @@
     $('minus').disabled = z <= lo + 0.01; $('plus').disabled = z >= hi - 0.01;
   }
 
-  /* カメラ側で大きくできる機種は、そちらを使う(画面で引きのばすより くっきり) */
-  let hwBusy = Promise.resolve();
-  function wantHw(z) {
-    const c = S.caps.zoom; if (!c || !S.track) return 1;
-    return clampNum(z, Math.max(1, c.min || 1), c.max || 1);
-  }
+  /* カメラ側で大きくできる機種は、そちらを使う(画面で引きのばすより くっきり)。
+     実際に どこまで大きくなったかは、カメラに 聞き直す(できない値は だまって無視されるため) */
+  let hwChain = Promise.resolve();
   function applyHw() {
-    const target = wantHw(S.z);
-    hwBusy = hwBusy.then(async () => {
-      if (!S.track || S.frozen || Math.abs(target - S.hw) < 0.01) return;
-      try { await S.track.applyConstraints({ advanced: [{ zoom: target }] }); S.hw = target; } catch (e) { S.caps.zoom = null; S.hw = 1; }
+    hwChain = hwChain.then(async () => {
+      const t = S.track, c = S.caps.zoom;
+      if (!t || !c || S.frozen) return;
+      const base = S.zoomBase;
+      let z = clampNum(base * S.z, c.min || base, c.max || base);
+      if (c.step) z = (c.min || 0) + Math.round((z - (c.min || 0)) / c.step) * c.step;
+      try { await t.applyConstraints({ advanced: [{ zoom: z }] }); } catch (e) { S.caps.zoom = null; }
+      if (t !== S.track) return;
+      const now = settings().zoom;
+      S.hw = S.caps.zoom && now ? Math.max(1, now / base) : 1;
       render();
-    });
+    }).catch(() => {});
   }
   function setZoom(z, quick) {
     const hi = S.frozen ? MAX_STILL : MAX_LIVE, lo = S.frozen ? S.frozenHw : 1;
@@ -284,12 +287,14 @@
     render(); showLevel(); hint();
     if (!S.frozen && !quick) applyHw();
   }
+  let lastStep = 0;
   function step(dir) {
-    const lv = S.frozen ? LEVELS.concat([10, 12]) : LEVELS;
-    let next;
-    if (dir > 0) next = lv.find((v) => v > S.z + 0.05); else next = lv.slice().reverse().find((v) => v < S.z - 0.05);
+    const now = Date.now(); if (now - lastStep < 350) return;   // 手のふるえで 2回 押されても 1段だけ
+    lastStep = now;
+    const lv = S.frozen ? LEVELS.concat([10]) : LEVELS;
+    const next = dir > 0 ? lv.find((v) => v > S.z + 0.05) : lv.slice().reverse().find((v) => v < S.z - 0.05);
     if (next === undefined) return;
-    if (S.frozen) {   // 止めた絵は、いま見ている所を まん中のまま 大きくする
+    if (S.frozen) {   // 止めた画面は、いま見ている所を まん中のまま 大きくする
       const s0 = S.z / S.frozenHw, s1 = Math.max(next, S.frozenHw) / S.frozenHw;
       S.tx *= s1 / s0; S.ty *= s1 / s0;
     }
@@ -300,7 +305,13 @@
   async function startCamera() {
     if (S.running || S.starting) return;
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) { showCover('nomedia'); return; }
-    S.starting = true; hint();
+    const my = ++gen; S.starting = true; hint();
+    const stale = (stream) => {
+      if (my === gen && !document.hidden) return false;
+      if (stream) stream.getTracks().forEach((t) => t.stop());
+      if (my === gen) { S.starting = false; hint(); }
+      return true;
+    };
     const tries = [
       { video: { facingMode: { ideal: 'environment' }, width: { ideal: 1920 }, height: { ideal: 1080 } }, audio: false },
       { video: { facingMode: { ideal: 'environment' } }, audio: false },
@@ -310,92 +321,153 @@
     for (const c of tries) {
       try { stream = await navigator.mediaDevices.getUserMedia(c); err = null; break; }
       catch (e) { err = e; if (e && (e.name === 'NotAllowedError' || e.name === 'SecurityError')) break; }
+      if (stale(null)) return;
     }
-    S.starting = false;
-    if (!stream) { showCover(err && (err.name === 'NotAllowedError' || err.name === 'SecurityError') ? 'denied' : 'fail'); hint(); return; }
-    if (document.hidden) { stream.getTracks().forEach((t) => t.stop()); return; }
-    S.stream = stream; S.track = stream.getVideoTracks()[0]; S.hw = 1; S.torch = false;
-    try { S.caps = (S.track.getCapabilities && S.track.getCapabilities()) || {}; } catch (e) { S.caps = {}; }
-    if (S.caps.focusMode && S.caps.focusMode.indexOf('continuous') >= 0) {
-      try { await S.track.applyConstraints({ advanced: [{ focusMode: 'continuous' }] }); } catch (e) {}
+    if (stale(stream)) return;
+    if (!stream) {
+      S.starting = false;
+      const denied = err && (err.name === 'NotAllowedError' || err.name === 'SecurityError');
+      showCover(isLine ? 'nomedia' : denied ? 'denied' : 'fail'); hint(); return;
+    }
+    const track = stream.getVideoTracks()[0];
+    let caps = {}; try { caps = (track.getCapabilities && track.getCapabilities()) || {}; } catch (e) {}
+    if (caps.focusMode && caps.focusMode.indexOf('continuous') >= 0) {
+      try { await track.applyConstraints({ advanced: [{ focusMode: 'continuous' }] }); } catch (e) {}
+      if (stale(stream)) return;
     }
     video.srcObject = stream;
     try { await video.play(); } catch (e) {}
-    await new Promise((r) => (video.videoWidth ? r() : video.addEventListener('loadedmetadata', r, { once: true })));
-    S.running = true; store.set('ok', '1'); hideCover();
-    S.track.addEventListener('ended', () => { stopCamera(); hint(); });
+    const ready = await Promise.race([
+      new Promise((r) => (video.readyState >= 1 && video.videoWidth ? r(true) : video.addEventListener('loadedmetadata', () => r(true), { once: true }))),
+      new Promise((r) => setTimeout(() => r(false), 5000))
+    ]);
+    if (stale(stream)) return;
+    if (!ready) { stream.getTracks().forEach((t) => t.stop()); video.srcObject = null; S.starting = false; showCover('fail'); hint(); return; }
+    S.stream = stream; S.track = track; S.caps = caps; S.hw = 1; S.torch = false;
+    S.zoomBase = (caps.zoom && settings().zoom) || (caps.zoom && caps.zoom.min) || 1;
+    S.running = true; S.starting = false; store.set('ok', '1'); hideCover();
+    track.addEventListener('ended', () => { if (S.track === track && !document.hidden) { stopCamera(); showCover('fail'); } });
     lightUi(); setZoom(S.z); keepAwake();
+    if (S.torchWanted && torchOk()) setTorch(true);   // つけ直す前に ライトが ついていたら、また つける
   }
   function stopCamera() {
+    gen++;
     if (S.stream) S.stream.getTracks().forEach((t) => t.stop());
-    S.stream = null; S.track = null; S.running = false; S.torch = false; S.hw = 1;
-    video.srcObject = null; lightUi(); releaseAwake();
+    S.stream = null; S.track = null; S.caps = {}; S.zoomBase = 1; S.hw = 1;
+    S.running = false; S.starting = false; S.torch = false;
+    video.srcObject = null; lightUi();
   }
 
-  /* 画面が 暗くならないように(カメラを使っている間だけ) */
-  let lock = null;
-  async function keepAwake() { try { if ('wakeLock' in navigator && !lock) { lock = await navigator.wakeLock.request('screen'); lock.addEventListener('release', () => { lock = null; }); } } catch (e) { lock = null; } }
-  function releaseAwake() { try { lock && lock.release(); } catch (e) {} lock = null; }
+  /* 画面が 暗くならないように */
+  let lock = null, locking = false;
+  async function keepAwake() {
+    if (lock || locking || !('wakeLock' in navigator) || document.hidden) return;
+    locking = true;
+    try { lock = await navigator.wakeLock.request('screen'); lock.addEventListener('release', () => { lock = null; }); } catch (e) { lock = null; }
+    locking = false;
+  }
 
   /* ---- ライト ---- */
   function torchOk() { return !!(S.track && S.caps && S.caps.torch); }
   function lightUi() {
-    const b = $('light'), ok = torchOk();
-    b.classList.toggle('on', S.torch); b.classList.toggle('na', S.running && !ok);
+    const b = $('light'), show = !S.running || torchOk();
+    b.classList.toggle('hidden', !show);           // 使えない機種では ボタンごと出さない(押しても何も起きないボタンを 置かない)
+    b.classList.toggle('on', S.torch);
     b.setAttribute('aria-pressed', S.torch ? 'true' : 'false');
-    $('lightSub').textContent = !S.running ? '消えています' : !ok ? '使えません' : S.torch ? 'ついています' : '消えています';
+    $('lightSub').textContent = S.torch ? 'ついています' : '消えています';
+    b.disabled = !S.running;
+  }
+  async function setTorch(want) {
+    const t = S.track; if (!t) return false;
+    try { await t.applyConstraints({ advanced: [{ torch: want }] }); } catch (e) {}
+    if (t !== S.track) return false;
+    const st = settings().torch;
+    S.torch = typeof st === 'boolean' ? st : want;   // 実際の様子を 見せる(iPhone は 返事が 古いことがあるので、そのときは 頼んだ通り)
+    lightUi();
+    return S.torch === want;
   }
   async function toggleLight() {
     buzz();
-    if (!S.running) { say('カメラが 動いていません', true, 3000); return; }
-    if (!torchOk()) { say('このスマホでは、ここから ライトを つけられません。明るい所で 見てください', true, 5000); return; }
-    const want = !S.torch;
-    try { await S.track.applyConstraints({ advanced: [{ torch: want }] }); S.torch = want; }
-    catch (e) { say('ライトが つきませんでした', true, 4000); }
-    lightUi();
+    if (!S.running || !torchOk()) return;
+    const want = !S.torch; S.torchWanted = want;
+    const ok = await setTorch(want);
+    if (!ok && want) say('ライトがつきませんでした。明るい所で見てください', true, 5000);
   }
 
-  /* ---- 止める / 動かす ---- */
-  function freeze() {
-    if (!S.running || !video.videoWidth) { say('カメラが 動いていません', true, 3000); return; }
+  /* ---- 止める / カメラに戻る ----
+     押した しゅんかんは 手がゆれるので、押してから 0.6秒の間の いちばん くっきりした絵を 残す */
+  const probe = document.createElement('canvas'); probe.width = 160; probe.height = 120;
+  const pctx = probe.getContext('2d', { willReadFrequently: true });
+  function sharpness() {
+    // 見えている まん中あたりを 小さく写して、となりの点との 明るさの差を 足す(差が大きいほど くっきり)
+    const vw = video.videoWidth, vh = video.videoHeight, s = Math.max(1, S.z / S.hw);
+    const cw = vw / s, ch = vh / s;
+    pctx.drawImage(video, (vw - cw) / 2, (vh - ch) / 2, cw, ch, 0, 0, 160, 120);
+    const d = pctx.getImageData(0, 0, 160, 120).data; let sum = 0;
+    for (let y = 1; y < 119; y += 2) for (let x = 1; x < 159; x += 2) {
+      const i = (y * 160 + x) * 4, g = d[i + 1];
+      sum += Math.abs(g - d[i + 5]) + Math.abs(g - d[i + 641]);
+    }
+    return sum;
+  }
+  function grab() {
     still.width = video.videoWidth; still.height = video.videoHeight;
     still.getContext('2d').drawImage(video, 0, 0, still.width, still.height);
-    S.frozen = true; S.frozenHw = S.hw; S.tx = 0; S.ty = 0;
-    stage.classList.add('frozen'); freezeUi(); setZoom(S.z);
+  }
+  function freeze() {
+    if (!S.running || !video.videoWidth || S.capturing) { if (!S.running) say('カメラがまだついていません', true, 3000); return; }
+    S.capturing = true; S.frozenHw = S.hw; hint();
+    $('freeze').disabled = true;
+    const t0 = performance.now(); let best = -1;
+    const each = (cb) => (video.requestVideoFrameCallback ? video.requestVideoFrameCallback(cb) : requestAnimationFrame(cb));
+    const tick = () => {
+      if (!S.capturing) return;
+      const t = performance.now() - t0;
+      if (t >= 120 && S.running) { try { const v = sharpness(); if (v > best) { best = v; grab(); } } catch (e) { if (best < 0) { grab(); best = 0; } } }
+      if (t < 650 && S.running) each(tick); else done();
+    };
+    const done = () => {
+      if (best < 0 && S.running) grab();
+      S.capturing = false; $('freeze').disabled = false;
+      if (!still.width) { hint(); return; }
+      S.frozen = true; S.tx = 0; S.ty = 0;
+      stage.classList.add('frozen'); freezeUi(); setZoom(S.z);
+    };
+    each(tick);
   }
   function unfreeze() {
     S.frozen = false; stage.classList.remove('frozen');
     S.z = clampNum(S.z, 1, MAX_LIVE); freezeUi();
-    if (!S.running) startCamera(); else setZoom(S.z);
+    still.width = 0; still.height = 0;   // 止めた絵の 記憶を 返す
+    if (!S.running) startCamera(); else { video.play().catch(() => {}); setZoom(S.z); }
   }
   function freezeUi() {
     const b = $('freeze');
     b.classList.toggle('on', S.frozen); b.setAttribute('aria-pressed', S.frozen ? 'true' : 'false');
-    $('freezeLab').innerHTML = S.frozen ? '<span class="ic">▶</span> 動かす' : '<span class="ic">⏸</span> 止める';
-    $('freezeSub').textContent = S.frozen ? '止めています' : 'ゆっくり読む';
+    $('freezeLab').textContent = S.frozen ? '▶ カメラに戻る' : '⏸ 止める';
+    $('freezeSub').textContent = S.frozen ? 'いま止まっています' : '画面を止めて、ゆっくり読む';
   }
 
   /* ---- 見やすい色 ---- */
   function colorUi() {
     const c = COLORS[S.color];
     view.className = 'view' + (c.key === 'normal' ? '' : ' f-' + c.key);
-    $('tint').classList.toggle('on', c.key === 'yellow');
     $('colorSub').textContent = c.name;
     $('color').classList.toggle('on', c.key !== 'normal');
   }
 
-  /* ---- 指の動き(止めた絵: なぞる・押す。2本指で 広げる) ---- */
+  /* ---- 指の動き ----
+     カメラの画面: 軽く1回押す=止める。止めた画面: なぞる=動かす、軽く1回押す=そこを まん中に。2本指で 広げる・ちぢめる */
   const pts = new Map(); let pinch = null, drag = null;
+  const startDrag = (x, y) => ({ x, y, tx: S.tx, ty: S.ty, t: Date.now(), moved: false });
   stage.addEventListener('pointerdown', (e) => {
-    if (e.target.closest('.cover')) return;
-    stage.setPointerCapture && stage.setPointerCapture(e.pointerId);
+    if (e.target.closest('.cover, .helpbtn')) return;
+    try { stage.setPointerCapture(e.pointerId); } catch (err) {}
     pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (pts.size === 2) {
       const [a, b] = [...pts.values()];
       pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, z: S.z, tx: S.tx, ty: S.ty }; drag = null;
-    } else if (pts.size === 1) {
-      drag = { x: e.clientX, y: e.clientY, tx: S.tx, ty: S.ty, t: Date.now(), moved: false };
-    }
+    } else if (pts.size === 1) drag = startDrag(e.clientX, e.clientY);
   });
   stage.addEventListener('pointermove', (e) => {
     if (!pts.has(e.pointerId)) return;
@@ -405,84 +477,109 @@
       const z = pinch.z * (Math.hypot(a.x - b.x, a.y - b.y) / pinch.d);
       if (S.frozen) { const r = clampNum(z, S.frozenHw, MAX_STILL) / pinch.z; S.tx = pinch.tx * r; S.ty = pinch.ty * r; }
       setZoom(z, true);
-    } else if (drag && S.frozen) {
+    } else if (drag) {
       const dx = e.clientX - drag.x, dy = e.clientY - drag.y;
-      if (Math.hypot(dx, dy) > 10) drag.moved = true;
-      if (drag.moved) { S.tx = drag.tx + dx; S.ty = drag.ty + dy; render(); }
+      if (Math.hypot(dx, dy) > 12) drag.moved = true;
+      if (drag.moved && S.frozen) { S.tx = drag.tx + dx; S.ty = drag.ty + dy; render(); }
     }
   });
   function up(e) {
     if (!pts.has(e.pointerId)) return;
     pts.delete(e.pointerId);
-    if (pinch && pts.size < 2) { pinch = null; drag = null; if (!S.frozen) applyHw(); return; }
-    if (drag && S.frozen && !drag.moved && e.type === 'pointerup' && Date.now() - drag.t < 600) {
-      // 押した所を まん中に
-      const r = stage.getBoundingClientRect();
+    if (pinch) {
+      if (pts.size < 2) {
+        pinch = null; if (!S.frozen) applyHw();
+        const rest = [...pts.values()][0]; drag = rest ? Object.assign(startDrag(rest.x, rest.y), { moved: true }) : null;
+      }
+      return;
+    }
+    const tap = drag && !drag.moved && e.type === 'pointerup' && Date.now() - drag.t < 600;
+    drag = null;
+    if (!tap) return;
+    const r = stage.getBoundingClientRect(), edge = 28;
+    if (S.frozen) {   // 押した所を まん中に
       S.tx -= e.clientX - (r.left + r.width / 2); S.ty -= e.clientY - (r.top + r.height / 2);
       buzz(); render();
+    } else if (S.running && e.clientX > r.left + edge && e.clientX < r.right - edge && e.clientY > r.top + edge && e.clientY < r.bottom - edge) {
+      buzz(); freeze();   // 持っている指が 画面のはしに 当たっただけでは 止めない
     }
-    drag = null;
   }
-  stage.addEventListener('pointerup', up); stage.addEventListener('pointercancel', up);
+  stage.addEventListener('pointerup', up); stage.addEventListener('pointercancel', up); stage.addEventListener('lostpointercapture', up);
   document.addEventListener('gesturestart', (e) => e.preventDefault());   // iPhone で ページ全体が 拡大されないように
 
   /* ---- はじめの説明・こまったとき ---- */
   function showCover(kind) {
-    let html = '', btn = 'はじめる';
-    const lineNote = isLine ? '<p class="small">いま LINE の中で 開いています。カメラが 使えないときは、下の「Safari・Chrome で 開く」を 押してください。</p>' : '';
+    let html = '', btn = 'もう一度ためす';
+    const lineNote = isLine ? '<p class="small">いまLINEの中で開いています。カメラが使えないときは、下の「Safari・Chromeで開く」を押してください。</p>' : '';
     if (kind === 'intro') {
+      btn = 'はじめる';
       html = '<h1>🔍 やさしいルーペ</h1>' +
-        '<p>スマホの <b>うしろのカメラ</b>で、小さい字を 大きく 見ます。</p>' +
-        '<p>次に「カメラを使いますか?」と 出たら、<b>「許可」</b>を 押してください。</p>' +
-        '<p class="small">写した絵は 保存しません。どこにも 送りません。</p>' + lineNote;
+        '<p>スマホの<b>うしろのカメラ</b>で、小さい字を大きく見ます。</p>' +
+        '<p>次に、カメラを使ってよいかの確認が出たら、<b>「許可」</b>を押してください。</p>' +
+        '<p class="small">写したものは保存しません。どこにも送りません。</p>' + lineNote;
     } else if (kind === 'denied') {
-      btn = 'もう一度 ためす';
-      html = '<h1>カメラが 使えません</h1>' +
+      html = '<h1>カメラが使えません</h1>' +
         '<p>カメラが「許可」されていません。</p>' +
-        '<p><b>iPhone</b>:アドレスの所の「ぁあ」→「Webサイトの設定」→ カメラを「許可」</p>' +
-        '<p><b>Android</b>:アドレスの 左の マーク →「権限」→ カメラを オン</p>' +
-        '<p class="small">わからないときは、ご家族に この画面を 見せてください。</p>' + lineNote;
+        '<p><b>iPhone</b>:アドレスの左はしのマーク→「Webサイトの設定」→「カメラ」→「許可」</p>' +
+        '<p><b>Android</b>:アドレスの左はしのマーク→「権限」→「カメラ」をオン</p>' +
+        '<p class="small">わからないときは、ご家族やお店の人に、この画面を見せてください。</p>';
     } else if (kind === 'nomedia') {
-      btn = 'もう一度 ためす';
-      html = '<h1>カメラが 使えません</h1>' +
-        (isLine ? '<p>LINE の中では カメラが 使えないことがあります。<br>下の「<b>Safari・Chrome で 開く</b>」を 押してください。</p>'
-                : '<p>この画面では カメラが 使えません。<b>Safari</b>(iPhone)か <b>Chrome</b>(Android)で 開いてください。</p>');
+      html = '<h1>カメラが使えません</h1>' +
+        (isLine ? '<p>LINEの中では、カメラが使えないことがあります。<br>下の「<b>Safari・Chromeで開く</b>」を押してください。</p>'
+                : '<p>この画面では、カメラが使えません。<b>Safari</b>(iPhone)か<b>Chrome</b>(Android)で開いてください。</p>');
     } else {
-      btn = 'もう一度 ためす';
-      html = '<h1>カメラが 動きません</h1>' +
-        '<p>ほかの アプリで カメラを 使っていたら、閉じてから「もう一度 ためす」を 押してください。</p>' + lineNote;
+      html = '<h1>カメラがつきません</h1>' +
+        '<p>ほかのアプリでカメラを使っていたら、閉じてから「もう一度ためす」を押してください。</p>' + lineNote;
     }
     $('coverBody').innerHTML = html; $('coverBtn').textContent = btn;
     $('coverExt').classList.toggle('hidden', !isLine);
+    $('coverBtn').classList.toggle('on', !isLine);
     $('cover').classList.add('on'); $('app').classList.add('covered');
   }
   function hideCover() { $('cover').classList.remove('on'); $('app').classList.remove('covered'); render(); }
   function openOutside() {
     const u = new URL(location.href); u.searchParams.set('openExternalBrowser', '1'); location.href = u.toString();
   }
+  function openHelp() { buzz(); $('help').classList.add('on'); $('help').scrollTop = 0; }
 
   /* ---- ボタン ---- */
   $('plus').addEventListener('click', () => step(1));
   $('minus').addEventListener('click', () => step(-1));
   $('light').addEventListener('click', toggleLight);
   $('freeze').addEventListener('click', () => { buzz(); S.frozen ? unfreeze() : freeze(); });
-  $('color').addEventListener('click', () => { buzz(); S.color = (S.color + 1) % COLORS.length; store.set('color', S.color); colorUi(); say('色: ' + COLORS[S.color].name, true, 2500); });
-  $('helpBtn').addEventListener('click', () => { buzz(); $('help').classList.add('on'); $('help').scrollTop = 0; });
-  $('coverHelp').addEventListener('click', () => { buzz(); $('help').classList.add('on'); $('help').scrollTop = 0; });
+  $('color').addEventListener('click', () => { buzz(); S.color = (S.color + 1) % COLORS.length; store.set('color', S.color); colorUi(); say('色をかえました:' + COLORS[S.color].name, true, 2500); });
+  $('helpBtn').addEventListener('click', openHelp);
+  $('coverHelp').addEventListener('click', openHelp);
   document.querySelectorAll('[data-close]').forEach((b) => b.addEventListener('click', () => { buzz(); $('help').classList.remove('on'); }));
   $('coverBtn').addEventListener('click', () => { buzz(); hideCover(); startCamera(); });
   $('coverExt').addEventListener('click', openOutside);
 
-  /* アプリを 閉じたら カメラを止める(電池と 次に開くときのため)。もどったら また つける */
+  /* アプリを 閉じたら カメラを止める(電池のため)。もどったら また つける。
+     iPhone は 止めると 次に また許可を聞かれることがあるので、止めずに「休ませる」だけにする */
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) { stopCamera(); }
-    else if (store.get('ok', '') && !S.frozen && !$('cover').classList.contains('on')) { startCamera(); }
+    if (document.hidden) {
+      S.capturing = false; $('freeze').disabled = false;
+      if (isIOS && S.track) { S.track.enabled = false; }
+      else stopCamera();
+      return;
+    }
+    keepAwake();
+    if (S.track && S.track.readyState === 'live') {
+      S.track.enabled = true; video.play().catch(() => {});
+      if (S.torchWanted && !S.torch && torchOk()) setTorch(true);
+      return;
+    }
+    if (S.track) stopCamera();
+    if (store.get('ok', '') && !S.frozen && !$('cover').classList.contains('on')) startCamera();
   });
   window.addEventListener('resize', render);
   video.addEventListener('loadedmetadata', render);
   video.addEventListener('resize', render);
 
   /* ---- はじまり ---- */
+  if (/[?&]openExternalBrowser=/.test(location.search)) {   // LINE から 外に出たあとの 印は 消しておく(ホーム画面に 入れたときに 残らないように)
+    try { history.replaceState(null, '', location.pathname + location.hash); } catch (e) {}
+  }
   colorUi(); freezeUi(); lightUi(); showLevel();
   if (store.get('ok', '')) startCamera(); else { showCover('intro'); hint(); }
 
