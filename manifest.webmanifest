@@ -1,0 +1,18 @@
+{
+  "name": "やさしいルーペ",
+  "short_name": "ルーペ",
+  "description": "スマホのカメラで、小さい字を大きく見るルーペ。広告なし、写真の保存なし。",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "id": "./?app=rupe-1",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
