@@ -187,6 +187,24 @@
   <div style="margin-top:24px"><button type="button" class="b on" data-close>◀ もどる</button></div>
 </div>
 
+<style>
+  /* install.js の案内(#igHelp): 細い画面(iPhone SE)では「あとで(このまま遊ぶ)」が3行に折れるので、ボタンを たてに並べる。部品の元が直ったら消してよい */
+  @media (max-width: 420px) { #igHelp .ig-btns { flex-direction: column; } }
+</style>
+<script>
+  // はじめの画面(Google Play 風: ホーム画面に入れる / このまま使う)。install.js が出す。アドレスに #noinstall で出ない
+  // color は ボタンの白い字が読める濃さにする(アプリの黄色 #ffd400 だと白い字が見えない)
+  window.INSTALL_GATE = {
+    id: 'rupe', name: 'やさしいルーペ', icon: 'icon-192.png', color: '#b45309',
+    tagline: '小さい字を「大きく見る」',
+    badges: ['無料', '広告なし', '登録なし', '写真は保存しない'],
+    shots: ['shots/1.jpg', 'shots/2.jpg', 'shots/3.jpg', 'shots/4.jpg'],
+    desc: 'スマホのカメラで、小さい字を大きく見るルーペです。お薬の説明や賞味期限、新聞、お店の値札に。ボタンは大きく、少なくしてあります。',
+    points: ['大きく・小さくは、ボタンを押すだけ。1倍から8倍まで', '手がふるえても、画面を止めて、ゆっくり読める', '暗い所はライト。黒地に白など、見やすい色にもかえられる'],
+    playLabel: '▶ このまま使う'
+  };
+</script>
+<script src="install.js"></script>
 <script>
 'use strict';
 (function () {
