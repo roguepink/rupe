@@ -194,7 +194,7 @@
 <script>
   // はじめの画面(Google Play 風: ホーム画面に入れる / このまま使う)。install.js が出す。アドレスに #noinstall で出ない
   // color は ボタンの白い字が読める濃さにする(アプリの黄色 #ffd400 だと白い字が見えない)
-  window.INSTALL_GATE = {
+  window.INSTALL_GATE = { large: true, installLabel: '📲 ホーム画面に入れる',
     id: 'rupe', name: 'やさしいルーペ', icon: 'icon-192.png', color: '#b45309',
     tagline: '小さい字を「大きく見る」',
     badges: ['無料', '広告なし', '登録なし', '写真は保存しない'],
